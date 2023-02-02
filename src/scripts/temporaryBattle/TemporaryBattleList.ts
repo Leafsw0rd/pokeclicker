@@ -223,6 +223,18 @@ TemporaryBattleList['Cue Ball Paxton'] = new TemporaryBattle(
         new TemporaryBattleRequirement('Biker Goon 3'),
     ]
 );
+TemporaryBattleList['Bill\'s Grandpa'] = new TemporaryBattle(
+    'Bill\'s Grandpa',
+    [
+        new GymPokemon('Vaporeon', 170000, 48),
+        new GymPokemon('Jolteon', 175000, 49),
+        new GymPokemon('Flareon', 180000, 50),
+    ],
+    'Hahaha, that was one of the best battles I\'ve ever had.',
+    [new QuestLineStepCompletedRequirement('Bill\'s Grandpa Treasure Hunt', 10)],
+    undefined,
+    {}
+);
 TemporaryBattleList['Blue 6'] = new TemporaryBattle(
     'Blue 6',
     [
@@ -294,16 +306,13 @@ TemporaryBattleList.Sudowoodo = new TemporaryBattle(
     'Sudowoodo',
     [new GymPokemon('Sudowoodo', 540000, 20)],
     undefined,
-    [
-        new GymBadgeRequirement(BadgeEnums.Plain),
-        new RouteKillRequirement(10, GameConstants.Region.johto, 36),
-    ],
+    [new GymBadgeRequirement(BadgeEnums.Plain)],
     [new TemporaryBattleRequirement('Sudowoodo'), new ObtainedPokemonRequirement('Sudowoodo')],
     {
         isTrainerBattle: false,
         returnTown: 'Goldenrod City',
         hideTrainer: true,
-        visibleRequirement: new RouteKillRequirement(10, GameConstants.Region.johto, 36),
+        visibleRequirement: new RouteKillRequirement(10, GameConstants.Region.johto, 31),
     }
 );
 TemporaryBattleList['Silver 3'] = new TemporaryBattle(
@@ -418,13 +427,17 @@ TemporaryBattleList['Red Gyarados'] = new TemporaryBattle(
     'Red Gyarados',
     [new GymPokemon('Gyarados', 1100000, 30, undefined, true)],
     undefined,
-    [new QuestLineStartedRequirement('Team Rocket Again')],
+    [
+        new QuestLineStartedRequirement('Team Rocket Again'),
+        new RouteKillRequirement(10, GameConstants.Region.johto, 43),
+    ],
     undefined,
     {
         displayName: 'Red Gyarados',
         returnTown: 'Mahogany Town',
         isTrainerBattle: false,
         hideTrainer: true,
+        visibleRequirement: new QuestLineStartedRequirement('Team Rocket Again'),
     }
 );
 TemporaryBattleList['Suicune 3'] = new TemporaryBattle(
@@ -819,6 +832,38 @@ TemporaryBattleList['Meta Groudon'] = new TemporaryBattle(
         displayName: 'Meta Groudon',
         returnTown: 'Lavaridge Town',
         imageName: '../pokemon/383.02',
+        hideTrainer: true,
+    }
+);
+TemporaryBattleList.Latias = new TemporaryBattle(
+    'Latias',
+    [new GymPokemon('Latias', 13800000, 100)],
+    '<i>Latias joins your party, and Latios flies away back to the mainland.</i>',
+    [new MultiRequirement([new QuestLineStepCompletedRequirement('The Eon Duo', 3), new CustomRequirement(ko.pureComputed(() => App.game.statistics.temporaryBattleDefeated[GameConstants.getTemporaryBattlesIndex('Latios')]()), 1, undefined, GameConstants.AchievementOption.less)])],
+    undefined,
+    {
+        displayName: 'Latias',
+        firstTimeRewardFunction: () => {
+            App.game.party.gainPokemonByName('Latias');
+        },
+        returnTown: 'Southern Island',
+        imageName: '../pokemon/380',
+        hideTrainer: true,
+    }
+);
+TemporaryBattleList.Latios = new TemporaryBattle(
+    'Latios',
+    [new GymPokemon('Latios', 13800000, 100)],
+    '<i>Latios joins your party, and Latias flies away back to the mainland.</i>',
+    [new MultiRequirement([new QuestLineStepCompletedRequirement('The Eon Duo', 3), new CustomRequirement(ko.pureComputed(() => App.game.statistics.temporaryBattleDefeated[GameConstants.getTemporaryBattlesIndex('Latias')]()), 1, undefined, GameConstants.AchievementOption.less)])],
+    undefined,
+    {
+        displayName: 'Latios',
+        firstTimeRewardFunction: () => {
+            App.game.party.gainPokemonByName('Latios');
+        },
+        returnTown: 'Southern Island',
+        imageName: '../pokemon/381',
         hideTrainer: true,
     }
 );
@@ -2326,6 +2371,24 @@ TemporaryBattleList['Calem 6'] = new TemporaryBattle(
     }
 );
 
+TemporaryBattleList['Marquis Grant'] = new TemporaryBattle(
+    'Marquis Grant',
+    [
+        new GymPokemon('Aurorus', 110668215, 80),
+        new GymPokemon('Tyrantrum', 110668215, 80),
+        new GymPokemon('Mega Tyranitar', 125000000, 80),
+        new GymPokemon('Mega Aggron', 125000000, 80),
+    ],
+    'To commemorate such an impressive show of teamwork, please accept these gifts!</br><img src="assets/images/megaStone/248.png"/></br></br><img src="assets/images/megaStone/306.png"/></br>',
+    [new GymBadgeRequirement(BadgeEnums.Elite_KalosChampion), new ClearGymRequirement(2000, GameConstants.getGymIndex('Cyllage City')), new ObtainedPokemonRequirement('Tyranitar'), new ObtainedPokemonRequirement('Aggron')],
+    undefined,
+    {
+        displayName: 'Marquis Grant',
+        imageName: '../gymLeaders/Grant',
+        firstTimeRewardFunction: () => [App.game.party.getPokemonByName('Tyranitar').giveMegastone(), App.game.party.getPokemonByName('Aggron').giveMegastone()],
+    }
+);
+
 TemporaryBattleList['Grand Duchess Diantha'] = new TemporaryBattle(
     'Grand Duchess Diantha',
     [
@@ -2364,6 +2427,60 @@ TemporaryBattleList['Hex Maniac Aster'] = new TemporaryBattle(
         displayName: 'Hex Maniac Aster',
         imageName: '../trainers/Hex Maniac',
         firstTimeRewardFunction: () => App.game.party.getPokemonByName('Gengar').giveMegastone(),
+    }
+);
+
+TemporaryBattleList['Wild Houndour Horde'] = new TemporaryBattle(
+    'Wild Houndour Horde',
+    [
+        new GymPokemon('Houndour', 60000000, 40),
+        new GymPokemon('Houndour', 60000000, 40),
+        new GymPokemon('Houndour', 60000000, 40),
+        new GymPokemon('Houndour', 60000000, 40),
+        new GymPokemon('Houndour', 60000000, 40),
+        new GymPokemon('Mega Houndoom', 120000000, 60),
+    ],
+    '<i>With the leader of the pack defeated, the Houndour horde scatters, their fiery fury reduced to ashes. In the gleaming sunlight, you catch sight of a small gem left behind by their leader...</i></br><img src="assets/images/megaStone/229.png"/></br><i>You obtained the Houndoomite!</i>',
+    [
+        new ObtainedPokemonRequirement('Houndoom'),
+        new WeatherRequirement([WeatherType.Sunny]),
+        new StatisticRequirement(['pokemonCaptured', PokemonHelper.getPokemonByName('Houndour').id], 500),
+        new GymBadgeRequirement(BadgeEnums.Elite_KalosChampion),
+    ],
+    undefined,
+    {
+        displayName: 'Wild Houndour Horde',
+        firstTimeRewardFunction: () => App.game.party.getPokemonByName('Houndoom').giveMegastone(),
+        imageName: '../pokemon/229.01',
+        hideTrainer: true,
+        returnTown: 'Dendemille Town',
+    }
+);
+
+TemporaryBattleList['Wild Electrike Horde'] = new TemporaryBattle(
+    'Wild Electrike Horde',
+    [
+        new GymPokemon('Electrike', 60000000, 40),
+        new GymPokemon('Electrike', 60000000, 40),
+        new GymPokemon('Electrike', 60000000, 40),
+        new GymPokemon('Electrike', 60000000, 40),
+        new GymPokemon('Electrike', 60000000, 40),
+        new GymPokemon('Mega Manectric', 120000000, 60),
+    ],
+    '<i>With the leader of the pack defeated, the Electrike horde scatters, their thunderous rage utterly depleted. In a thunderbolt\'s flash, you catch sight of a small gem left behind by their leader...</i></br><img src="assets/images/megaStone/310.png"/></br><i>You obtained the Manectite!</i>',
+    [
+        new ObtainedPokemonRequirement('Manectric'),
+        new WeatherRequirement([WeatherType.Thunderstorm]),
+        new StatisticRequirement(['pokemonCaptured', PokemonHelper.getPokemonByName('Electrike').id], 500),
+        new GymBadgeRequirement(BadgeEnums.Elite_KalosChampion),
+    ],
+    undefined,
+    {
+        displayName: 'Wild Electrike Horde',
+        firstTimeRewardFunction: () => App.game.party.getPokemonByName('Manectric').giveMegastone(),
+        imageName: '../pokemon/310.01',
+        hideTrainer: true,
+        returnTown: 'Dendemille Town',
     }
 );
 
@@ -2613,7 +2730,7 @@ TemporaryBattleList['Captain Ilima'] = new TemporaryBattle(
         new GymPokemon('Smeargle', 189973142, 51),
         new GymPokemon('Komala', 198608284, 51),
     ],
-    'Yes! You have emerged victorious! You and your Pokémon have become quite a delightful team! Off to Lush Jungle? It\'s been awhile since I last visited Akala.',
+    'Yes! You have emerged victorious! You and your Pokémon have become quite a delightful team! Off to Lush Jungle? It\'s been a while since I last visited Akala.',
     [
         new TemporaryBattleRequirement('Captain Mina'),
         new ClearDungeonRequirement(1, GameConstants.getDungeonIndex('Hau\'oli Cemetery')),
